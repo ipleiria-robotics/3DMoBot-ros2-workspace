@@ -1,3 +1,13 @@
 [submodule "apriltag_ros"]
 	path = apriltag_ros
 	url = https://github.com/Ab-Tx/apriltag_ros
+[submodule "nav2focbox"]
+	path = nav2focbox
+	url = git@github.com:ipleiria-robotics/nav2focbox.git
+[submodule "pointcloud_to_laserscan"]
+	path = pointcloud_to_laserscan
+	url = git@github.com:ipleiria-robotics/pointcloud_to_laserscan.git
+[submodule "rtabmap"]
+	path = rtabmap
+	url = https://github.com/introlab/rtabmap.git
+	branch = humble-devel
