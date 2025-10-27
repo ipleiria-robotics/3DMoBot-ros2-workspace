@@ -19,3 +19,10 @@
 	path = realsense-ros
 	url = https://github.com/IntelRealSense/realsense-ros.git
 	branch = ros2-master
+[submodule "ros_odrive"]
+	path = ros_odrive
+	url = https://github.com/odriverobotics/ros_odrive
+[submodule "rtabmap_ros"]
+	path = rtabmap_ros
+	url = https://github.com/introlab/rtabmap_ros.git
+	branch = humble-devel
