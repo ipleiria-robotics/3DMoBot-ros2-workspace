@@ -11,3 +11,7 @@
 	path = rtabmap
 	url = https://github.com/introlab/rtabmap.git
 	branch = humble-devel
+[submodule "opennav_docking"]
+	path = opennav_docking
+	url = https://github.com/open-navigation/opennav_docking.git
+	branch = humble
