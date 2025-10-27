@@ -15,3 +15,7 @@
 	path = opennav_docking
 	url = https://github.com/open-navigation/opennav_docking.git
 	branch = humble
+[submodule "realsense-ros"]
+	path = realsense-ros
+	url = https://github.com/IntelRealSense/realsense-ros.git
+	branch = ros2-master
