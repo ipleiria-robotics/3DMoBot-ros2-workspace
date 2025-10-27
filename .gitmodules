@@ -23,3 +23,6 @@
 	path = rtabmap_ros
 	url = https://github.com/introlab/rtabmap_ros.git
 	branch = humble-devel
+[submodule "apriltag_ros"]
+	path = apriltag_ros
+	url = git@github.com:ipleiria-robotics/apriltag_ros.git
