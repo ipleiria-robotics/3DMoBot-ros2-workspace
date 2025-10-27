@@ -1,6 +1,3 @@
-[submodule "apriltag_ros"]
-	path = apriltag_ros
-	url = https://github.com/Ab-Tx/apriltag_ros
 [submodule "nav2focbox"]
 	path = nav2focbox
 	url = git@github.com:ipleiria-robotics/nav2focbox.git
