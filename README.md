@@ -14,7 +14,7 @@
     git submodule update --recursive
     ```
 
-- Replace RTAB-Map and Realsense launch files with the custom ones:
+- Replace RTAB-Map, Odrive, and Realsense launch and configuration files with the custom ones:
 
     ```
     cp -r replace_rtabmap_ros/* rtabmap_ros
