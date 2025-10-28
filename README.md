@@ -1,7 +1,10 @@
 # 3DMoBot ROS2 Packages — Sync Repository
 
 ### Summary
-- This repository manages and syncs the set of ROS2 packages required for the 3DMoBot project. Use it to fetch, update and prepare the source workspace for development alongised ROS2 Humble. Workflow tested on Xubuntu 22.04.
+
+ This repository contains the set of ROS2 packages required for the 3DMoBot project.  Workflow tested on Xubuntu 22.04 with ROS2 Humble.
+
+![](./Robot.jpeg)
 
 ### Quick Start
 - Clone the repo:
@@ -32,8 +35,12 @@
     ```
 - Use the [cycloneDDS](https://docs.ros.org/en/humble/Installation/RMW-Implementations/DDS-Implementations/Working-with-Eclipse-CycloneDDS.html) (recommendationf rom RTAB-Map):
     ```
-    echo "export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp" >> ~/.bashrc
+    export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
     ```
+    - You can set it as default by adding it to bashrc: 
+        ```
+        echo "export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp" >> ~/.bashrc
+        ```
 
 ### Setup the CAN bus
 
@@ -49,11 +56,11 @@ Refer to Odrive S1 documentation for further details.
 
 ### Troubleshooting
 
-If building fails, RTAB-Map and realsense-ros packages may require syncing with the latest version for compatibility with latest source of ROS2 Humble. 
+If building fails, RTAB-Map and realsense-ros packages may require syncing with the latest version. The latest source of ROS2 Humble may introduce incompatibilities with the fetched versions. 
 
 Also ensure:
-- Data from sensors is being publish.
-- CAN bus of odrive boards is available.
+- Data from sensors is being published.
+- CAN bus is available.
 
 ### Content overview
 
