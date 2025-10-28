@@ -17,8 +17,8 @@
 - Replace RTAB-Map and Realsense launch files with the custom ones:
 
     ```
-    mv -f replace_rtabmap_ros/* rtabmap_ros
-    mv -f rs_launch.py realsense-ros/realsense2_camera/launch
+    cp replace_rtabmap_ros/* rtabmap_ros
+    cp rs_launch.py realsense-ros/realsense2_camera/launch
     rm -r replace_rtabmap_ros
     ```
 - build the workspace
@@ -33,9 +33,25 @@
     echo "export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp" >> ~/.bashrc
     ```
 
+### Setup the CAN bus
+
+Setup the CAN bus using:
+```
+sudo ip link set dev can0 type can bitrate 250000
+sudo ip link set dev can0 txqueuelen 256
+sudo ip link set dev can0 up
+```
+The interface "can0" should appear if you run `ip link show`.
+
+Refer to Odrive S1 documentation for further details.
+
 ### Troubleshooting
 
-RTAB-Map and realsense-ros packages may require syncing with the latest version for compatibility with latest source of ROS2 Humble. 
+If building fails, RTAB-Map and realsense-ros packages may require syncing with the latest version for compatibility with latest source of ROS2 Humble. 
+
+Also ensure:
+- Data from sensors is being publish.
+- CAN bus of odrive boards is available.
 
 ### Content overview
 
