@@ -1,0 +1,216 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:macro name="diffbot" params="prefix">
+
+    <!-- Define robot constants -->
+    <xacro:property name="base_mass" value="0.4"/> <!-- arbitrary value for base mass -->
+    <xacro:property name="base_width" value="0.401"/>
+    <xacro:property name="base_length" value="0.52"/>
+    <xacro:property name="base_height" value="0.215"/>
+    <xacro:property name="PI" value="3.1415926535897931"/>
+
+    <xacro:property name="wheel_radius" value="0.0875"/>
+    <xacro:property name="wheel_width" value="0.058"/> <!-- script edited just so this value is used to offset the wheel from the main body -->
+    <xacro:property name="wheel_ygap" value="0.008"/> <!-- y distance from wheel center to body -->
+    <xacro:property name="wheel_zoff" value="0.120"/> <!-- Wheel Z offset from center (base_height/2+0.0125) -->
+    <xacro:property name="wheel_xoff" value="0.105"/> <!-- About 155 mm from front, about 105mm from center -->
+
+    <xacro:property name="caster_xoff" value="0.182"/> <!-- about  442mm from front, which is about 182mm from center -->
+    <xacro:property name="caster_radius" value="0.05"/> <!-- radius for caster wheel, represented as a sphere -->
+
+    <xacro:property name="lidar_radius" value="0.037"/> <!-- Radius for the cylinder representing the LiDAR body -->
+    <xacro:property name="front_to_lidar_xoff" value="0.076"/> <!-- Radius for the cylinder representing the LiDAR body -->
+    <xacro:property name="lidar_height" value="0.13988"/> <!-- Obtained by the distance from the acrylic base to the LiDAR center *2 -->
+    <xacro:property name="lidar_base_height" value="0.0225"/> <!-- height of the LiDAR's base plate accessory -->
+
+    <xacro:property name="realsense_xoff" value="0.2630449"/> 
+    <xacro:property name="realsense_yoff" value="0.0175"/> 
+    <xacro:property name="realsense_zoff" value="0.021"/> <!-- negative offset from acrylic Lidar's base -->
+
+    <!-- Define inertial property macros  -->
+    <xacro:macro name="box_inertia" params="m w h d">
+    <inertial>
+        <origin xyz="0 0 0" rpy="${pi/2} 0 ${pi/2}"/>
+        <mass value="${m}"/>
+        <inertia ixx="${(m/12) * (h*h + d*d)}" ixy="0.0" ixz="0.0" iyy="${(m/12) * (w*w + d*d)}" iyz="0.0" izz="${(m/12) * (w*w + h*h)}"/>
+    </inertial>
+    </xacro:macro>
+
+    <xacro:macro name="cylinder_inertia" params="m r h">
+    <inertial>
+        <origin xyz="0 0 0" rpy="${pi/2} 0 0" />
+        <mass value="${m}"/>
+        <inertia ixx="${(m/12) * (3*r*r + h*h)}" ixy = "0" ixz = "0" iyy="${(m/12) * (3*r*r + h*h)}" iyz = "0" izz="${(m/2) * (r*r)}"/>
+    </inertial>
+    </xacro:macro>
+
+    <xacro:macro name="sphere_inertia" params="m r">
+    <inertial>
+        <mass value="${m}"/>
+        <inertia ixx="${(2/5) * m * (r*r)}" ixy="0.0" ixz="0.0" iyy="${(2/5) * m * (r*r)}" iyz="0.0" izz="${(2/5) * m * (r*r)}"/>
+    </inertial>
+    </xacro:macro>
+
+    <!-- Robot Base -->
+
+    <link name="base_link">
+        <visual>
+            <geometry>
+                <box size="${base_length} ${base_width} ${base_height}"/>
+            </geometry>
+
+            <material name="Cyan">
+                <color rgba="0 1.0 1.0 1.0"/>
+            </material>
+        </visual>
+        
+        <!-- Physics (for simulation only) -->
+        <collision>
+            <geometry>
+                <box size="${base_length} ${base_width} ${base_height}"/>
+            </geometry>
+        </collision>  
+
+        <!-- <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="${base_mass}"/>
+        <inertia
+            ixx="${base_mass / 12.0 * (base_length*base_length + base_height*base_height)}" ixy="0.0" ixz="0.0"
+            iyy="${base_mass / 12.0 * (base_height*base_height + base_width*base_width)}" iyz="0.0"
+            izz="${base_mass / 12.0 * (base_width*base_width + base_length*base_length)}"/>
+        </inertial> -->
+    </link>
+
+    <!-- Robot Footprint -->
+    <link name="base_footprint">
+        <!-- Physics (for simulation only) -->
+        <xacro:box_inertia m="15" w="${base_width}" d="${base_length}" h="${base_height}"/>    
+    </link>
+
+    <joint name="base_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="base_footprint"/>
+        <origin xyz="0.0 0.0 ${-(wheel_radius+wheel_zoff)}" rpy="0 0 0"/>
+    </joint>
+
+    <!-- Caster Wheel -->
+    <link name="caster_rear_wheel">
+        <visual>
+            <geometry>
+            <sphere radius="${(caster_radius)}"/> <!-- (wheel_radius+wheel_zoff-(base_height/2)) -->
+            </geometry>
+            <material name="Cyan">
+            <color rgba="0 1.0 1.0 1.0"/>
+            </material>
+        </visual>
+
+        <!-- Physics (for simulation only) -->
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <sphere radius="${(caster_radius)}"/> <!-- ${(wheel_radius+wheel_zoff-(base_height/2))}"/ -->
+            </geometry>
+        </collision>
+        <xacro:sphere_inertia m="0.5" r="${(wheel_radius+wheel_zoff-(base_height/2))}"/> <!-- may not be exactly accurate -->
+    </link>
+
+    <joint name="caster_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="caster_rear_wheel"/>
+        <origin xyz="${-caster_xoff} 0.0 ${-(base_height/2+caster_radius)}" rpy="0 0 0"/>
+    </joint>
+
+    <!-- Wheels -->
+    <xacro:macro name="wheel" params="prefix2 x_reflect y_reflect">
+        <link name="${prefix2}_wheel">
+            <visual>
+            <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+            <geometry>
+                <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+            </geometry>
+            <material name="Gray">
+                <color rgba="0.5 0.5 0.5 1.0"/>
+            </material>
+            </visual>
+            <!-- Physics (for simulation only) -->
+            <collision>
+                <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+                <geometry>
+                    <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+                </geometry>
+            </collision>
+            <xacro:cylinder_inertia m="0.5" r="${wheel_radius}" h="${wheel_width}"/>
+        </link>
+        <!-- add intertia here? -->
+    
+        <joint name="${prefix2}_wheel_joint" type="continuous">
+            <parent link="base_link"/>
+            <child link="${prefix2}_wheel"/>
+            <origin xyz="${(x_reflect*wheel_xoff)} ${y_reflect*(base_width/2+wheel_ygap+wheel_width/2)} ${-wheel_zoff}" rpy="0 0 0"/>
+            <axis xyz="0 1 0"/>
+            <dynamics damping="0.2"/>
+            <limit effort="100" velocity="1.0"/>
+        </joint>
+    </xacro:macro>
+
+    <!-- LiDAR -->
+    <link name="os_sensor">
+        <visual>
+            <geometry>
+                <cylinder radius="${(lidar_radius)}" length="${(lidar_height)}"/> <!-- (wheel_radius+wheel_zoff-(base_height/2)) -->
+            </geometry>
+            <material name="red">
+            <color rgba="1.0 0.0 0.0 0.0"/>
+            </material>
+        </visual>
+    </link>
+
+    <joint name="lidar_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="os_sensor"/>
+        <origin xyz="${base_length/2-front_to_lidar_xoff} 0.0 ${base_height/2+lidar_base_height}" rpy="0 0 ${pi/2}"/>
+    </joint>
+
+    <!-- Realsense -->
+    <link name="camera_link">
+        <visual>
+            <geometry>
+                <box size="0.01 0.01 0.01"/>
+            </geometry>
+            <material name="blue">
+            <color rgba="0.0 0.0 1.0 0.0"/>
+            </material>
+        </visual>
+    </link>
+
+    <joint name="realsense_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="camera_link"/>
+        <origin xyz="${realsense_xoff} ${realsense_yoff} ${(base_height/2-realsense_zoff)}" rpy="0 0 0"/>
+    </joint>
+
+    <!-- Realsense body -->
+    <link name="camera_body">
+        <visual>
+            <geometry>
+                <box size="0.026 0.09 0.025"/>
+            </geometry>
+            <material name="blue2">
+            <color rgba="0.0 0.0 1.0 1.0"/>
+            </material>
+        </visual>
+    </link>
+
+    <joint name="realsense_body_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="camera_body"/>
+        <origin xyz="${realsense_xoff} 0.0 ${(base_height/2-realsense_zoff)}" rpy="0 0 0"/>
+    </joint>
+
+    <xacro:wheel prefix2="${prefix}left" x_reflect="1" y_reflect="1" /> <!-- drivewhl_l -->
+    <xacro:wheel prefix2="${prefix}right" x_reflect="1" y_reflect="-1" /> <!-- drivewhl_r -->
+
+  </xacro:macro>
+</robot>
