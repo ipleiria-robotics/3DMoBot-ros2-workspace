@@ -73,7 +73,7 @@ Also ensure:
     - ROS package for the realsense camera.
 - robot_launch
     -   Launch file used to initiate near all** software used by the 3DMoBot.
-- ros_odrive (fork)
+- ros_odrive
     -   Odrive S1 ROS package.
 - rtabmap
 - rtabmap_ros
