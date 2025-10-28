@@ -1,4 +1,4 @@
-# 3DMoBot ROS2 Packages — Sync Repository
+# 3DMoBot ROS2 Workspace
 
 ### Summary
 
