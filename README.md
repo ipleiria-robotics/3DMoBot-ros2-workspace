@@ -17,9 +17,9 @@
 - Replace RTAB-Map and Realsense launch files with the custom ones:
 
     ```
-    cp replace_rtabmap_ros/* rtabmap_ros
-    cp replace_ros_odrive/* ros_odrive
-    cp rs_launch.py realsense-ros/realsense2_camera/launch
+    cp -r replace_rtabmap_ros/* rtabmap_ros
+    cp -r replace_ros_odrive/* ros_odrive
+    cp -r rs_launch.py realsense-ros/realsense2_camera/launch
     rm -r replace_rtabmap_ros
     rm -r replace_ros_odrive
     ```
