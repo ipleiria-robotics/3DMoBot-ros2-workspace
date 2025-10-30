@@ -10,7 +10,7 @@
 - Clone the repo:
     
     ```
-    mkdir src; cd src
+    mkdir src; cd src # Create src folder (optional)
     git clone git@github.com:Ab-Tx/3DMoBot-ros2-packages.git
     cd 3DMoBot-ros2-packages
     git submodule init
@@ -28,7 +28,7 @@
     ```
 - build the workspace
     ```
-    # cd to the root of your workspace first!
+    cd ../.. # cd to the root of your workspace
     export MAKEFLAGS=-j6 # Can be ignored if you have a lot of RAM (>16GB)
     colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release
     source ./install/local_setup.bash 
@@ -54,6 +54,15 @@ The interface "can0" should appear if you run `ip link show`.
 
 Refer to Odrive S1 documentation for further details.
 
+### Test workflow
+
+```
+source install/local_setup.bash
+ros2 launch robot_launch robot.launch.py
+```
+You should see the RTAB-Map GUI and Rviz.
+![](./img.png)
+
 ### Troubleshooting
 
 If building fails, RTAB-Map and realsense-ros packages may require syncing with the latest version. The latest source of ROS2 Humble may introduce incompatibilities with the fetched versions. 
@@ -73,11 +82,27 @@ Also ensure:
     - ROS package for the realsense camera.
 - robot_launch
     -   Launch file used to initiate near all** software used by the 3DMoBot.
-- ros_odrive
+- ros_odrive (fork)
     -   Odrive S1 ROS package.
 - rtabmap
 - rtabmap_ros
 - replace_rtabmap_ros
     - Not a package. Contains several customized launch files for RTAB-Map.
+- replace_ros_odrive
+    - Not a package. Contains several customized configuration files for ros_odrive, including the robot's URDF.
 
 ** Refer to the commented information in robot.launch.py
+
+### Additional information
+
+
+Parameters for RTAB-Map: `rtabmap_ros/rtabmap_launch/launch/interbot+rsdepth.launch.py`
+
+Parameters for apriltag_ros: `apriltag_ros/cfg/tags_36h11.yaml`
+
+Parameters for collision_monitor: `my_nav2_launch/params/collision_monitor_params_realsense.yaml`
+
+Parameters for opennav_docking: `my_nav2_launch/params/nova_carter_docking.yaml`
+
+Parameters for all other packages in the navigations stack:
+`my_nav2_launch/params/nav2_params.yaml`
