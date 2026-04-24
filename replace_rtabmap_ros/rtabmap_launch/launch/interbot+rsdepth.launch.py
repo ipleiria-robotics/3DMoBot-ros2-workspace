@@ -69,12 +69,13 @@ def generate_launch_description():
           'Grid/MaxGroundHeight':'0.05', # All points above 5 cm are obstacles
           'Grid/MaxObstacleHeight':'0.4',  # All points over 1 meter are ignored
           'Optimizer/GravitySigma':'0', # Disable imu constraints (we are already in 2D)
+          'Mem/IncrementalMemory':'False', # False = localization, True = mapping  
           'wait_imu_to_init':True}]
     # base_link -> camera_link = +8.6 CM in Z
 
     parameters2 = parameters.copy()
     parameters2.append({ # \/ \/ For node package='rtabmap_util', executable='obstacles_detection' \/ \/
-                'Mem/IncrementalMemory':'True', # default: False @todo test 
+                'Mem/IncrementalMemory':'True', # False = localization, True = mapping
                 'Mem/InitWMWithAllNodes':'True'})
 
     remappings=[

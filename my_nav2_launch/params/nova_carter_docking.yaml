@@ -8,7 +8,7 @@ docking_server:
     undock_angular_tolerance: 0.1
     max_retries: 3
     base_frame: "base_link"
-    fixed_frame: "odom"
+    fixed_frame: "map"
     dock_backwards: false
     dock_prestaging_tolerance: 0.5
 
@@ -16,20 +16,20 @@ docking_server:
     dock_plugins: ['nova_carter_dock']
     nova_carter_dock:
       plugin: 'opennav_docking::SimpleChargingDock'
-      docking_threshold: 0.05 # 5 CM
+      docking_threshold: 1.0 # 30 CM
       staging_x_offset: 0.0
-      use_external_detection_pose: false
+      use_external_detection_pose: true
       detector_service_name: '/detector/toggle' # must be provided
       use_battery_status: false
       use_stall_detection: false
       rotate_to_dock: true
 
       external_detection_timeout: 5.0
-      external_detection_translation_x: 0.0
+      external_detection_translation_x: 0.3
       external_detection_translation_y: 0.0
-      external_detection_rotation_roll: -1.57
-      external_detection_rotation_pitch: 0.0
-      external_detection_rotation_yaw: -1.57
+      external_detection_rotation_roll: 0.0 #-1.57
+      external_detection_rotation_pitch: 1.57 #0.0
+      external_detection_rotation_yaw: 0.0 #-1.57
       filter_coef: 0.1
       dock_direction: "forward" # "backward"
 
@@ -41,18 +41,21 @@ docking_server:
     dock_home:
       type: '' #'nova_carter_dock' # "Note that you may leave the type to an empty string if there is only one type of dock being used."
       frame: map
-      pose: [ -0.558, 1.33, -2.48] # relative to origin of map frame [x, y, theta (rad?)]
-      # id: 25
+      pose: [ 1.917, -0.748, -0.430] # relative to origin of map frame [x, y, theta (rad?)]
+      id: 24
+      # # Use ros2 topic echo /tf --once
+      # # Convert rotation quaternion to radians 
     dock_print_zone:
       type: '' #'nova_carter_dock'
       frame: map
-      pose: [2.43, 4.33, 2.17]
-      # id: 26
+      # pose: [-0.685, 2.916, -3.108]
+      pose: [-1.266, 1.051, -2.372]
+      id: 25
     dock_delivery:
       type: '' #'nova_carter_dock'
       frame: map
-      pose: [-1.0, 0.0, 0.0]
-      # id: 27
+      pose: [3.394, 3.443, 1.892]
+      id: 26
 
     controller:
       k_phi: 3.0
@@ -66,7 +69,7 @@ docking_server:
       use_collision_detection: false
       costmap_topic: "local_costmap/costmap_raw"
       footprint_topic: "local_costmap/published_footprint"
-      transform_tolerance: 0.1
+      transform_tolerance: 2.0 #0.1
       projection_time: 1.0
       simulation_time_step: 0.1
       dock_collision_threshold: 0.3
