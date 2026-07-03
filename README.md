@@ -1,8 +1,16 @@
+
+
 # 3DMoBot ROS2 Workspace
 
 ### Summary
 
- This repository contains the set of ROS2 packages required for the 3DMoBot project.  Workflow tested on Xubuntu 22.04 with ROS2 Humble.
+This repository contains the set of ROS2 packages required for the 3DMoBot project.
+
+View the associated dissetation at:  (link will be added soon)
+
+Additional content related to the dissertation is available at: https://github.com/ipleiria-robotics/3DMoBot-ros2-workspace/tree/main/Documents
+
+Workflow tested on Xubuntu 22.04 with ROS2 Humble.
 
 ![](./Robot.jpeg)
 
